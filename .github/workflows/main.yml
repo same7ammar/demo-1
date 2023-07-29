@@ -78,7 +78,6 @@ jobs:
         uses: actions/checkout@v3
       - name: update deployment file
         run: |
-          cd demo-1/
           sed -i 's/demo-1:main:.*/demo-1:main:1.0.${{ steps.commit.outputs.short }}/g' k8s/app_deployment.yaml
       - name: print sha
         shell: bash
