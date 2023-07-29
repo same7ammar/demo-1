@@ -19,7 +19,7 @@ jobs:
         uses: docker/metadata-action@v4
         with:
           images: |
-            name/app
+            same7ammar/demo-1
           tags: |
             type=ref,event=branch
             type=ref,event=pr
