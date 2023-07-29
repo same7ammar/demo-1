@@ -74,7 +74,10 @@ jobs:
           # push: true
           tags: ${{ steps.commit.outputs.short }}
 
-      - name: update deployment file
-        run: |
-          cd demo-1/k8s/
-          sed -i 's/demo-1:main:.*/demo-1:main:1.0.${{ steps.commit.outputs.short }}/g' app_deployment.yaml
+      # - name: update deployment file
+      #   run: |
+      #     cd demo-1/k8s/
+      #     sed -i 's/demo-1:main:.*/demo-1:main:1.0.${{ steps.commit.outputs.short }}/g' app_deployment.yaml
+      - name: print sha
+        shell: bash
+        run: echo ${{ steps.commit.outputs.short }}
