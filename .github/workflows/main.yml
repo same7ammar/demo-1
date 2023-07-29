@@ -22,22 +22,37 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-      - name: Docker meta
-        id: meta
-        uses: docker/metadata-action@v4
+      # - name: Docker meta
+      #   id: meta
+      #   uses: docker/metadata-action@v4
+      #   with:
+      #     # list of Docker images to use as base name for tags
+      #     images: |
+      #       same7ammar/demo-1
+      #     # generate Docker tags based on the following events/attributes
+      #     tags: |
+      #       type=schedule
+      #       type=ref,event=branch
+      #       type=ref,event=pr
+      #       type=semver,pattern={{version}}
+      #       type=semver,pattern={{major}}.{{minor}}
+      #       type=semver,pattern={{major}}
+      #       type=sha
+      - id: commit
+        uses: pr-mpt/actions-commit-hash@v2
         with:
           # list of Docker images to use as base name for tags
           images: |
             same7ammar/demo-1
           # generate Docker tags based on the following events/attributes
           tags: |
-            type=schedule
-            type=ref,event=branch
-            type=ref,event=pr
-            type=semver,pattern={{version}}
-            type=semver,pattern={{major}}.{{minor}}
-            type=semver,pattern={{major}}
-            type=sha
+            # type=schedule
+            # type=ref,event=branch
+            # type=ref,event=pr
+            # type=semver,pattern={{version}}
+            # type=semver,pattern={{major}}.{{minor}}
+            # type=semver,pattern={{major}}
+            type=sha,format=long
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v2
       - name: Set up Docker Buildx
@@ -54,5 +69,16 @@ jobs:
         with:
           context: .
           push: ${{ github.event_name != 'pull_request' }}
-          tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
+          # tags: ${{ steps.meta.outputs.tags }}
+          # labels: ${{ steps.meta.outputs.labels }}
+          # push: true
+          tags: ${{ steps.commit.outputs.short }}
+
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: update deployment file
+        run: |
+          sed -i 's/demo-1:main:.*/demo-1:main:1.0.${{ steps.commit.outputs.short }}/g' k8s/app_deployment.yaml
+      - name: print sha
+        shell: bash
+        run: echo ${{ steps.commit.outputs.short }}
