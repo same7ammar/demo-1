@@ -72,13 +72,12 @@ jobs:
           # tags: ${{ steps.meta.outputs.tags }}
           # labels: ${{ steps.meta.outputs.labels }}
           # push: true
-          tags: ${{ steps.commit.outputs.short }}
+          tags: ${{ steps.commit.outputs.long }}
 
-      - name: Checkout
-        uses: actions/checkout@v3
-      - name: update deployment file
-        run: |
-          sed -i 's/demo-1:main:.*/demo-1:main:1.0.${{ steps.commit.outputs.short }}/g' k8s/app_deployment.yaml
       - name: print sha
         shell: bash
-        run: echo ${{ steps.commit.outputs.short }}
+        run: echo ${{ steps.commit.outputs.long }}
+
+      - name: update deployment file
+        run: |
+          sed -i 's/demo-1:main:.*/demo-1:main:1.0.${{ steps.commit.outputs.long }}/g' k8s/app_deployment.yaml
