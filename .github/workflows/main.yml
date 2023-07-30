@@ -42,9 +42,10 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
       - name: Commit Sha
         shell: bash
-        run: echo ${{ steps.meta.outputs.tags }} && ls
+        run: ls -la
 
       - name: Update image tag for container nginx in deployment.yaml
+        if: github.event_name != 'pull_request'
         uses: loveholidays/gitops-action-yaml-updater@v1.0
         with:
           mode: IMAGE_TAG
