@@ -13,7 +13,7 @@ spec:
     spec:
       containers:
         - name: demo-1
-          image: same7ammar/demo-1:main
+          image: same7ammar/demo-1:sha-98a967994bf518f03b80b745eb3f3e2875583509
           resources:
             limits:
               memory: "128Mi"
