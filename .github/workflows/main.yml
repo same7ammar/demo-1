@@ -44,17 +44,18 @@ jobs:
         shell: bash
         run: ls -la
 
-      - name: Update image tag for container nginx in deployment.yaml
-        if: github.event_name != 'pull_request'
-        uses: loveholidays/gitops-action-yaml-updater@v1.0
-        with:
-          mode: IMAGE_TAG
-          container-name: demo-1
-          new-image-tag: ${{ steps.meta.outputs.tags.sha.long }}
-          dir: k8s/
-          files: app_deployment.yaml
+      # - name: Update image tag for container nginx in deployment.yaml
+      #   if: github.event_name != 'pull_request'
+      #   uses: loveholidays/gitops-action-yaml-updater@v1.0
+      #   with:
+      #     mode: IMAGE_TAG
+      #     container-name: demo-1
+      #     new-image-tag: ${{ steps.meta.outputs.tags.sha.long }}
+      #     dir: k8s/
+      #     files: app_deployment.yaml
 
-      # - name: Update deployment
-      #   shell: bash
-      #   run: |
-      #     sed -i "s/demo-1:.*/demo-1:1.0.${{ steps.meta.outputs.tags.sha.long }}/g"  k8s/app_deployment.yaml
+      - name: Update deployment
+        if: github.event_name != 'pull_request'
+        shell: bash
+        run: |
+          sed -i "s/demo-1:*/demo-1:${{ steps.meta.outputs.tags.sha.long }}/g"  k8s/app_deployment.yaml
